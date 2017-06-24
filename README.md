@@ -11,7 +11,7 @@ package main()
 import "github.com/brianasapp/sputter"
 
 func main() {
-	s, err := sputter.Gen("[A-Z0-9]")
+	s, err := sputter.Gen("[A-Z0-9](Word){1,3}")
 	if err != nil {
 		panic(err)
 	}
@@ -22,5 +22,6 @@ func main() {
 ### Supported Operations
  * literal
  * character class
+ * capture
  * concat
  * repeat

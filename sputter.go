@@ -2,7 +2,6 @@ package sputter
 
 import (
 	"bytes"
-	"encoding/json"
 	"fmt"
 	"math/rand"
 	"regexp/syntax"
@@ -30,13 +29,13 @@ func sput(r *syntax.Regexp) (string, error) {
 		return literal(r), nil
 	case syntax.OpCharClass:
 		return charClass(r), nil
+	case syntax.OpCapture:
+		return sput(r.Sub[0])
 	case syntax.OpRepeat:
 		return repeat(r)
 	case syntax.OpConcat:
 		return concat(r)
 	default:
-		b, _ := json.MarshalIndent(r, "", "    ")
-		fmt.Println(string(b))
 		return "", fmt.Errorf("unsupported syntax operation %d", r.Op)
 	}
 }
