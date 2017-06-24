@@ -22,3 +22,5 @@ func main() {
 ### Supported Operations
  * literal
  * character class
+ * concat
+ * repeat

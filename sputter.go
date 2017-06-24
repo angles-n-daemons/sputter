@@ -1,6 +1,9 @@
 package sputter
 
 import (
+	"bytes"
+	"encoding/json"
+	"fmt"
 	"math/rand"
 	"regexp/syntax"
 	"time"
@@ -17,18 +20,64 @@ func Gen(exp string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	return sput(r), nil
+	return sput(r)
 }
 
 // simple dfs syntax to string
-func sput(r *syntax.Regexp) string {
+func sput(r *syntax.Regexp) (string, error) {
 	switch r.Op {
 	case syntax.OpLiteral:
-		return literal(r)
+		return literal(r), nil
 	case syntax.OpCharClass:
-		return charClass(r)
+		return charClass(r), nil
+	case syntax.OpRepeat:
+		return repeat(r)
+	case syntax.OpConcat:
+		return concat(r)
+	default:
+		b, _ := json.MarshalIndent(r, "", "    ")
+		fmt.Println(string(b))
+		return "", fmt.Errorf("unsupported syntax operation %d", r.Op)
 	}
-	return ""
+}
+
+func concat(r *syntax.Regexp) (string, error) {
+	var buffer bytes.Buffer
+	for _, sub := range r.Sub {
+		s, err := sput(sub)
+		if err != nil {
+			return "", err
+		}
+
+		_, err = buffer.WriteString(s)
+		if err != nil {
+			return "", err
+		}
+	}
+
+	return buffer.String(), nil
+}
+
+func repeat(r *syntax.Regexp) (string, error) {
+	var buffer bytes.Buffer
+	n := random(r.Min, r.Max)
+	if r.Max == 0 {
+		return "", nil
+	}
+
+	for i := 0; i < n; i++ {
+		s, err := sput(r.Sub[0])
+		if err != nil {
+			return "", err
+		}
+
+		_, err = buffer.WriteString(s)
+		if err != nil {
+			return "", err
+		}
+	}
+
+	return buffer.String(), nil
 }
 
 func literal(r *syntax.Regexp) string {

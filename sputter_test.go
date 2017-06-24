@@ -21,6 +21,14 @@ func TestCharClassMultipleRange(t *testing.T) {
 	testSputHundredEmoji(t, "[A-Z0-9]")
 }
 
+func TestConcat(t *testing.T) {
+	testSputHundredEmoji(t, "A[0-9]")
+}
+
+func TestRange(t *testing.T) {
+	testSputHundredEmoji(t, "A{1,5}")
+}
+
 func testSputHundredEmoji(t *testing.T, exp string) {
 	for i := 0; i < 100; i++ {
 		s, err := Gen(exp)
