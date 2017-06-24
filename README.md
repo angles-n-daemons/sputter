@@ -18,3 +18,7 @@ func main() {
 	// do something with s
 }
 ```
+
+### Supported Operations
+ * literal
+ * character class
