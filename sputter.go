@@ -42,8 +42,6 @@ func charClass(r *syntax.Regexp) string {
 	default:
 		// randomly select from available ranges
 		i := random(0, len(r.Rune)/2) * 2
-
-		// add one to n2 because random will not select max value
 		n1, n2 := int(r.Rune[i]), int(r.Rune[i+1])
 		if n2-n1 == 0 {
 			return string(r.Rune[i : i+1])
