@@ -6,6 +6,7 @@ import (
 	"math/rand"
 	"regexp/syntax"
 	"time"
+	"unicode/utf8"
 )
 
 const (
@@ -33,6 +34,8 @@ func sput(r *syntax.Regexp) (string, error) {
 		return literal(r), nil
 	case syntax.OpCharClass:
 		return charClass(r), nil
+	case syntax.OpAnyCharNotNL:
+		return any(r), nil
 	case syntax.OpCapture:
 		return sput(r.Sub[0])
 	case syntax.OpRepeat:
@@ -76,6 +79,14 @@ func charClass(r *syntax.Regexp) string {
 		return s
 	}
 	return ""
+}
+
+func any(r *syntax.Regexp) string {
+	c := '\n'
+	for utf8.ValidRune(c) && c == '\n' {
+		c = rune(random(1, int(utf8.MaxRune)))
+	}
+	return string([]rune{c})
 }
 
 func repeat(r *syntax.Regexp) (string, error) {
