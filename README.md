@@ -2,7 +2,7 @@
 
 _WARNING: I AM NOT CRYPTO FRIENDLY_
 
-POSIX basic regular expressions to psuedo random string generator
+POSIX basic regular expressions to psuedo random string generator, just for fun :)
 
 ### Usage
 ```go
