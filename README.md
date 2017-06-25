@@ -15,7 +15,7 @@ import (
 )
 
 func main() {
-	s, err := sputter.Gen("[A-Z0-9]^(Word){1,3}$")
+	s, err := sputter.Gen("[A-Z0-9]^(Word){1,3}$.+")
 	if err != nil {
 		panic(err)
 	}
