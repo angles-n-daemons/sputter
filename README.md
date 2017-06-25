@@ -6,16 +6,20 @@ POSIX basic regular expressions to psuedo random string generator
 
 ### Usage
 ```go
-package main()
+package main
 
-import "github.com/brianasapp/sputter"
+import (
+	"fmt"
+
+	"github.com/brianasapp/sputter"
+)
 
 func main() {
-	s, err := sputter.Gen("[A-Z0-9]^(Word){1,3}$.+")
+	s, err := sputter.Gen("[A-Z0-9]^(Word){1,3}$")
 	if err != nil {
 		panic(err)
 	}
-	fmt.Printf("generated below: \n",s)
+	fmt.Printf("generated below: \n%s\n", s)
 }
 ```
 

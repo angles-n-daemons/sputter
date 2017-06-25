@@ -2,7 +2,6 @@ package sputter
 
 import (
 	"bytes"
-	"encoding/json"
 	"fmt"
 	"math/rand"
 	"regexp/syntax"
@@ -22,8 +21,6 @@ func Gen(exp string) (string, error) {
 	rand.Seed(time.Now().UTC().UnixNano())
 
 	r, err := syntax.Parse(exp, 0)
-	b, _ := json.MarshalIndent(r, "", "    ")
-	fmt.Println(string(b))
 	if err != nil {
 		return "", err
 	}
