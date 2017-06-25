@@ -11,7 +11,7 @@ package main()
 import "github.com/brianasapp/sputter"
 
 func main() {
-	s, err := sputter.Gen("[A-Z0-9](Word){1,3}.")
+	s, err := sputter.Gen("[A-Z0-9](Word){1,3}.+")
 	if err != nil {
 		panic(err)
 	}
@@ -21,7 +21,7 @@ func main() {
 
 ```bash
 $ go run main.go
-generated: 5WordWordꄈ
+generated: 5WordWordЊѯѹկ¢↔≡♲
 ```
 
 
