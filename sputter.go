@@ -2,6 +2,7 @@ package sputter
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"math/rand"
 	"regexp/syntax"
@@ -21,6 +22,8 @@ func Gen(exp string) (string, error) {
 	rand.Seed(time.Now().UTC().UnixNano())
 
 	r, err := syntax.Parse(exp, 0)
+	b, _ := json.MarshalIndent(r, "", "    ")
+	fmt.Println(string(b))
 	if err != nil {
 		return "", err
 	}
@@ -36,6 +39,10 @@ func sput(r *syntax.Regexp) (string, error) {
 		return charClass(r), nil
 	case syntax.OpAnyCharNotNL:
 		return any(r), nil
+	case syntax.OpBeginLine:
+		return "\n", nil
+	case syntax.OpEndLine:
+		return "\n", nil
 	case syntax.OpCapture:
 		return sput(r.Sub[0])
 	case syntax.OpRepeat:
@@ -82,6 +89,22 @@ func charClass(r *syntax.Regexp) string {
 }
 
 func any(r *syntax.Regexp) string {
+	c := '\n'
+	for utf8.ValidRune(c) && c == '\n' {
+		c = rune(random(1, int(utf8.MaxRune)))
+	}
+	return string([]rune{c})
+}
+
+func begin(r *syntax.Regexp) string {
+	c := '\n'
+	for utf8.ValidRune(c) && c == '\n' {
+		c = rune(random(1, int(utf8.MaxRune)))
+	}
+	return string([]rune{c})
+}
+
+func end(r *syntax.Regexp) string {
 	c := '\n'
 	for utf8.ValidRune(c) && c == '\n' {
 		c = rune(random(1, int(utf8.MaxRune)))

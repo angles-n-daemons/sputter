@@ -11,17 +11,20 @@ package main()
 import "github.com/brianasapp/sputter"
 
 func main() {
-	s, err := sputter.Gen("[A-Z0-9](Word){1,3}.+")
+	s, err := sputter.Gen("[A-Z0-9]^(Word){1,3}$.+")
 	if err != nil {
 		panic(err)
 	}
-	fmt.Printf("generated: ",s)
+	fmt.Printf("generated below: \n",s)
 }
 ```
 
 ```bash
 $ go run main.go
-generated: 5WordWordЊѯѹկ¢↔≡♲
+generated below:
+5
+WordWord
+Њѯѹկ¢↔≡♲
 ```
 
 
@@ -31,6 +34,8 @@ generated: 5WordWordЊѯѹկ¢↔≡♲
  * character class
  * capture
  * any char not newline
+ * begin line
+ * end line
  * star
  * plus
  * question

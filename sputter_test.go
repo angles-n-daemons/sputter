@@ -49,6 +49,14 @@ func TestAnyCharNotNL(t *testing.T) {
 	testSputHundredEmoji(t, ".")
 }
 
+func TestBeginLine(t *testing.T) {
+	// testSputHundredEmoji(t, "a^a")
+}
+
+func TestEndLine(t *testing.T) {
+	// testSputHundredEmoji(t, "a$a")
+}
+
 func testSputHundredEmoji(t *testing.T, exp string) {
 	for i := 0; i < 100; i++ {
 		s, err := Gen(exp)
