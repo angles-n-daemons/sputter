@@ -35,6 +35,8 @@ func sput(r *syntax.Regexp) (string, error) {
 		return repeat(r)
 	case syntax.OpConcat:
 		return concat(r)
+	case syntax.OpAlternate:
+		return alternate(r)
 	default:
 		return "", fmt.Errorf("unsupported syntax operation %d", r.Op)
 	}
@@ -77,6 +79,11 @@ func repeat(r *syntax.Regexp) (string, error) {
 	}
 
 	return buffer.String(), nil
+}
+
+func alternate(r *syntax.Regexp) (string, error) {
+	i := random(0, len(r.Sub))
+	return sput(r.Sub[i])
 }
 
 func literal(r *syntax.Regexp) string {

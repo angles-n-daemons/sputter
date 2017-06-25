@@ -29,6 +29,10 @@ func TestRange(t *testing.T) {
 	testSputHundredEmoji(t, "A{1,5}")
 }
 
+func TestAlternate(t *testing.T) {
+	testSputHundredEmoji(t, "A|B")
+}
+
 func testSputHundredEmoji(t *testing.T, exp string) {
 	for i := 0; i < 100; i++ {
 		s, err := Gen(exp)
