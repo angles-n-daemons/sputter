@@ -24,6 +24,11 @@ func main() {
  * literal
  * character class
  * capture
- * concat
+ * star
+ * plus
+ * question
  * repeat
+ * concat
  * alternation
+
+_note: for randomized repetition, there is a max value of 100. let me know if there's a better way to do it_

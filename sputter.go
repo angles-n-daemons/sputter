@@ -8,6 +8,10 @@ import (
 	"time"
 )
 
+const (
+	repetitionMax = 100
+)
+
 // Gen takes a regular expression and attempts
 //  to generate a pseudo-randomized string that
 //  matches the input expression.
@@ -33,6 +37,12 @@ func sput(r *syntax.Regexp) (string, error) {
 		return sput(r.Sub[0])
 	case syntax.OpRepeat:
 		return repeat(r)
+	case syntax.OpStar:
+		return star(r)
+	case syntax.OpPlus:
+		return plus(r)
+	case syntax.OpQuest:
+		return quest(r)
 	case syntax.OpConcat:
 		return concat(r)
 	case syntax.OpAlternate:
@@ -40,50 +50,6 @@ func sput(r *syntax.Regexp) (string, error) {
 	default:
 		return "", fmt.Errorf("unsupported syntax operation %d", r.Op)
 	}
-}
-
-func concat(r *syntax.Regexp) (string, error) {
-	var buffer bytes.Buffer
-	for _, sub := range r.Sub {
-		s, err := sput(sub)
-		if err != nil {
-			return "", err
-		}
-
-		_, err = buffer.WriteString(s)
-		if err != nil {
-			return "", err
-		}
-	}
-
-	return buffer.String(), nil
-}
-
-func repeat(r *syntax.Regexp) (string, error) {
-	var buffer bytes.Buffer
-	n := random(r.Min, r.Max)
-	if r.Max == 0 {
-		return "", nil
-	}
-
-	for i := 0; i < n; i++ {
-		s, err := sput(r.Sub[0])
-		if err != nil {
-			return "", err
-		}
-
-		_, err = buffer.WriteString(s)
-		if err != nil {
-			return "", err
-		}
-	}
-
-	return buffer.String(), nil
-}
-
-func alternate(r *syntax.Regexp) (string, error) {
-	i := random(0, len(r.Sub))
-	return sput(r.Sub[i])
 }
 
 func literal(r *syntax.Regexp) string {
@@ -110,6 +76,91 @@ func charClass(r *syntax.Regexp) string {
 		return s
 	}
 	return ""
+}
+
+func repeat(r *syntax.Regexp) (string, error) {
+	var buffer bytes.Buffer
+	n := random(r.Min, r.Max)
+	if r.Max == 0 {
+		return "", nil
+	}
+
+	for i := 0; i < n; i++ {
+		s, err := sput(r.Sub[0])
+		if err != nil {
+			return "", err
+		}
+
+		_, err = buffer.WriteString(s)
+		if err != nil {
+			return "", err
+		}
+	}
+
+	return buffer.String(), nil
+}
+
+func star(r *syntax.Regexp) (string, error) {
+	var buffer bytes.Buffer
+	n := random(0, repetitionMax)
+	for i := 0; i < n; i++ {
+		s, err := sput(r.Sub[0])
+		if err != nil {
+			return "", err
+		}
+
+		_, err = buffer.WriteString(s)
+		if err != nil {
+			return "", err
+		}
+	}
+	return buffer.String(), nil
+}
+
+func plus(r *syntax.Regexp) (string, error) {
+	var buffer bytes.Buffer
+	n := random(1, repetitionMax)
+	for i := 0; i < n; i++ {
+		s, err := sput(r.Sub[0])
+		if err != nil {
+			return "", err
+		}
+
+		_, err = buffer.WriteString(s)
+		if err != nil {
+			return "", err
+		}
+	}
+	return buffer.String(), nil
+}
+
+func quest(r *syntax.Regexp) (string, error) {
+	if rand.Int()%2 == 0 {
+		return sput(r.Sub[0])
+	}
+	return "", nil
+}
+
+func concat(r *syntax.Regexp) (string, error) {
+	var buffer bytes.Buffer
+	for _, sub := range r.Sub {
+		s, err := sput(sub)
+		if err != nil {
+			return "", err
+		}
+
+		_, err = buffer.WriteString(s)
+		if err != nil {
+			return "", err
+		}
+	}
+
+	return buffer.String(), nil
+}
+
+func alternate(r *syntax.Regexp) (string, error) {
+	i := random(0, len(r.Sub))
+	return sput(r.Sub[i])
 }
 
 func random(min, max int) int {

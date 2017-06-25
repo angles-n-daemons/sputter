@@ -33,6 +33,18 @@ func TestAlternate(t *testing.T) {
 	testSputHundredEmoji(t, "A|B")
 }
 
+func TestPlus(t *testing.T) {
+	testSputHundredEmoji(t, "A+")
+}
+
+func TestStar(t *testing.T) {
+	testSputHundredEmoji(t, "A*")
+}
+
+func TestQuest(t *testing.T) {
+	testSputHundredEmoji(t, "A+")
+}
+
 func testSputHundredEmoji(t *testing.T, exp string) {
 	for i := 0; i < 100; i++ {
 		s, err := Gen(exp)
