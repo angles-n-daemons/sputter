@@ -58,8 +58,26 @@ func TestEndLine(t *testing.T) {
 }
 
 func testSputHundredEmoji(t *testing.T, exp string) {
+	// test cryptographically secure function 100 times
 	for i := 0; i < 100; i++ {
 		s, err := Gen(exp)
+		if err != nil {
+			t.Error(`error from Gen:`, err)
+		}
+
+		match, err := regexp.Match(exp, []byte(s))
+		if !match {
+			t.Errorf(`output string "%s" does not match expression "%s"`, s, exp)
+		}
+
+		if err != nil {
+			t.Error(err)
+		}
+	}
+
+	// do same for cryptographically insecure function
+	for i := 0; i < 100; i++ {
+		s, err := GenInsecure(exp)
 		if err != nil {
 			t.Error(`error from Gen:`, err)
 		}
