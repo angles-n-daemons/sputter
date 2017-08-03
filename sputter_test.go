@@ -25,6 +25,10 @@ func TestConcat(t *testing.T) {
 	testSputHundredEmoji(t, `A[0-9]`)
 }
 
+func TestExactRepeat(t *testing.T) {
+	testSputHundredEmoji(t, `A{5}`)
+}
+
 func TestRange(t *testing.T) {
 	testSputHundredEmoji(t, `A{1,5}`)
 }
