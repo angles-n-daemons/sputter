@@ -111,7 +111,12 @@ func end(r *syntax.Regexp) string {
 
 func repeat(r *syntax.Regexp) (string, error) {
 	var buffer bytes.Buffer
-	n := random(r.Min, r.Max)
+
+	n := r.Min
+	if r.Max > r.Min {
+		n = random(r.Min, r.Max)
+	}
+
 	if r.Max == 0 {
 		return "", nil
 	}
