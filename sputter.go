@@ -2,7 +2,9 @@ package sputter
 
 import (
 	"bytes"
+	crypto "crypto/rand"
 	"fmt"
+	"math/big"
 	"math/rand"
 	"regexp/syntax"
 	"time"
@@ -11,15 +13,33 @@ import (
 
 const (
 	repetitionMax = 100
+	maxUint64     = ^uint64(0)
+	maxInt64      = int64(maxUint64 >> 1)
 )
+
+func init() {
+	rand.Seed(time.Now().UTC().UnixNano())
+}
 
 // Gen takes a regular expression and attempts
 //  to generate a pseudo-randomized string that
 //  matches the input expression.
 func Gen(exp string) (string, error) {
-	// setup random package
-	rand.Seed(time.Now().UTC().UnixNano())
+	// cryptographically seed random package
+	bigSeed, err := crypto.Int(crypto.Reader, big.NewInt(maxInt64))
+	if err != nil {
+		return "", err
+	}
+	rand.Seed(bigSeed.Int64())
 
+	r, err := syntax.Parse(exp, 0)
+	if err != nil {
+		return "", err
+	}
+	return sput(r)
+}
+
+func GenInsecure(exp string) (string, error) {
 	r, err := syntax.Parse(exp, 0)
 	if err != nil {
 		return "", err

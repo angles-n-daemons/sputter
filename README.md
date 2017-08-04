@@ -1,7 +1,5 @@
 # sputter
 
-_WARNING: I AM NOT CRYPTO FRIENDLY_
-
 POSIX basic regular expressions to psuedo random string generator, just for fun :)
 
 ### Usage
@@ -30,6 +28,8 @@ generated below:
 WordWord
 Њѯѹկ¢↔≡♲
 ```
+
+_For cryptographically insecure usage, use the `GenInsecure` function in place of `Gen`_
 
 
 
