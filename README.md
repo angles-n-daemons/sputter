@@ -2,6 +2,8 @@
 
 POSIX basic regular expressions to psuedo random string generator, just for fun :)
 
+(Forked from my old work account)
+
 ### Usage
 ```go
 package main
