@@ -49,4 +49,4 @@ _For cryptographically insecure usage, use the `GenInsecure` function in place o
  * concat
  * alternation
 
-_note: for randomized repetition, there is a max value of 100. let me know if there's a better way to do it_
+_note: for randomized repetition, there is a max value of 100._
